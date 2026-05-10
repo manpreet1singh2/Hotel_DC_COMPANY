@@ -211,6 +211,7 @@ export interface User extends Usuario {
 }
 
 export interface Booking extends Reserva {
+  bookingId: string
   roomId: string
   guestName: string
   checkIn: string
