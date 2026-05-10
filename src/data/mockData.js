@@ -106,6 +106,7 @@ export const mockServices = [
 
 export const mockBookings = [
   {
+    bookingId: "BK001",
     id: "BK001",
     roomId: 1,
     roomName: "Suite Presidencial",
@@ -119,6 +120,7 @@ export const mockBookings = [
     createdAt: "2024-01-10T10:00:00Z",
   },
   {
+    bookingId: "BK002",
     id: "BK002",
     roomId: 2,
     roomName: "Habitación Deluxe",
