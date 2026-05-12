@@ -58,14 +58,14 @@ const AdminDashboard = () => {
     { name: "Configuración", icon: Settings, description: "Ajustes del sistema", href: "/admin/settings" },
   ]
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status) => {
     const statusConfig = {
       'Activa': 'bg-green-100 text-green-800',
       'Pendiente': 'bg-yellow-100 text-yellow-800',
       'Cancelada': 'bg-red-100 text-red-800',
       'Completada': 'bg-blue-100 text-blue-800'
     }
-    return statusConfig[status as keyof typeof statusConfig] || 'bg-gray-100 text-gray-800'
+    return statusConfig[status] || 'bg-gray-100 text-gray-800'
   }
 
   return (

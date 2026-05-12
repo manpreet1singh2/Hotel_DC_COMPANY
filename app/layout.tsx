@@ -7,6 +7,8 @@ import Footer from "@/components/footer"
 
 const inter = Inter({ subsets: ["latin"] })
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Hotel de Lujo - Reservas Online",
   description:
