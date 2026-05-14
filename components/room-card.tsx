@@ -1,70 +1,104 @@
 "use client"
 
 import Link from "next/link"
-import { Users } from "lucide-react"
+import Image from "next/image"
+import { Users, Wifi, Coffee, Tv } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import ImageCarousel from "@/components/image-carousel"
 import type { Room } from "@/lib/types"
 
 interface RoomCardProps {
   room: Room
 }
 
+// Map room type to actual images
+const getRoomImage = (room: Room): string => {
+  if (room.image && !room.image.includes("placeholder")) return room.image
+
+  const tipo = room.tipo || room.name || ""
+  if (tipo.includes("Suite") || tipo.includes("suite")) return "/luxury-suite-bedroom.jpg"
+  if (tipo.includes("Doble") || tipo.includes("Deluxe") || tipo.includes("doble")) return "/deluxe-room-bedroom.jpg"
+  if (tipo.includes("Familiar") || tipo.includes("familiar") || tipo.includes("Family")) return "/family-suite-bedroom.jpg"
+  return "/standard-room-bedroom.jpg"
+}
+
+const amenityIcons: Record<string, any> = {
+  WiFi: Wifi,
+  "Wi-Fi": Wifi,
+  TV: Tv,
+  Cafetera: Coffee,
+}
+
 export default function RoomCard({ room }: RoomCardProps) {
-  // Generar múltiples imágenes para el carrusel (en una aplicación real, estas vendrían de la base de datos)
-  const roomImages = [
-    room.image || "/placeholder.svg?height=400&width=600",
-    "/placeholder.svg?height=400&width=600&text=Vista+1",
-    "/placeholder.svg?height=400&width=600&text=Vista+2",
-    "/placeholder.svg?height=400&width=600&text=Baño",
-  ]
+  const roomImage = getRoomImage(room)
+  const price = room.price ?? room.precio ?? 0
+  const capacity = room.capacity ?? room.capacidad ?? 2
+  const available = room.isAvailable ?? room.estado === "Disponible"
+  const amenities = room.amenities ?? (room.servicios_incluidos ? room.servicios_incluidos.split(", ") : [])
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-48">
-        <ImageCarousel images={roomImages} alt={room.name} aspectRatio="video" showThumbnails={false} />
+    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group">
+      <div className="relative h-52 overflow-hidden">
+        <Image
+          src={roomImage}
+          alt={room.name || `Room ${room.number}`}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+        />
         <div
-          className={`absolute top-2 right-2 px-2 py-1 rounded-full text-white text-xs font-medium ${
-            room.isAvailable ? "bg-green-500" : "bg-red-500"
+          className={`absolute top-3 right-3 px-3 py-1 rounded-full text-white text-xs font-semibold ${
+            available ? "bg-green-500" : "bg-red-500"
           }`}
         >
-          {room.isAvailable ? "Disponible" : "No disponible"}
+          {available ? "Available" : "Occupied"}
         </div>
+        {room.tipo && (
+          <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
+            {room.tipo}
+          </div>
+        )}
       </div>
 
-      <div className="p-6">
-        <h3 className="text-xl font-semibold mb-2">{room.name}</h3>
+      <div className="p-5">
+        <h3 className="text-lg font-bold mb-1 text-gray-900 truncate">
+          {room.name || `Room ${room.number}`}
+        </h3>
 
-        <div className="flex items-center text-gray-600 mb-3">
-          <Users className="h-5 w-5 mr-2" />
-          <span>Hasta {room.capacity} huéspedes</span>
+        <div className="flex items-center text-gray-500 mb-3 text-sm">
+          <Users className="h-4 w-4 mr-1.5" />
+          <span>Up to {capacity} guests</span>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {room.amenities.slice(0, 3).map((amenity, index) => (
-            <Badge key={index} variant="outline">
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {amenities.slice(0, 3).map((amenity: string, index: number) => (
+            <Badge key={index} variant="outline" className="text-xs font-normal">
               {amenity}
             </Badge>
           ))}
-          {room.amenities.length > 3 && <Badge variant="outline">+{room.amenities.length - 3} más</Badge>}
+          {amenities.length > 3 && (
+            <Badge variant="outline" className="text-xs font-normal">
+              +{amenities.length - 3} more
+            </Badge>
+          )}
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
           <div>
-            <span className="text-xl font-bold text-gray-900">${room.price}</span>
-            <span className="text-gray-600"> / noche</span>
+            <span className="text-xl font-bold text-gray-900">
+              ${price.toLocaleString()}
+            </span>
+            <span className="text-gray-500 text-sm"> / night</span>
           </div>
 
           <Link
             href={`/rooms/${room.id}`}
-            className={`px-4 py-2 rounded-md transition-colors ${
-              room.isAvailable
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              available
                 ? "bg-primary text-white hover:bg-primary/90"
-                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-gray-100 text-gray-400 cursor-not-allowed"
             }`}
-            onClick={(e) => !room.isAvailable && e.preventDefault()}
+            onClick={(e) => !available && e.preventDefault()}
           >
-            {room.isAvailable ? "Ver detalles" : "No disponible"}
+            {available ? "View Details" : "Unavailable"}
           </Link>
         </div>
       </div>

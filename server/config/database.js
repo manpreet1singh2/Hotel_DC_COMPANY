@@ -11,53 +11,60 @@ const dbConfig = {
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  acquireTimeout: 60000,
-  timeout: 60000,
-  reconnect: true,
+  connectTimeout: 10000,
   charset: "utf8mb4",
 }
 
-// Crear pool de conexiones
-const pool = mysql.createPool(dbConfig)
+let pool = null
 
-// Función para probar la conexión
+const createPool = () => {
+  if (!process.env.DB_HOST && process.env.NODE_ENV === "production") {
+    console.warn("⚠️  No DB_HOST configured — database features will be unavailable")
+    return null
+  }
+  return mysql.createPool(dbConfig)
+}
+
+pool = createPool()
+
 export const testConnection = async () => {
+  if (!pool) {
+    console.warn("⚠️  Database pool not initialized")
+    return false
+  }
   try {
     const connection = await pool.getConnection()
-    console.log("✅ Conexión a MySQL establecida correctamente")
-    console.log(`📊 Base de datos: ${dbConfig.database}`)
-    console.log(`🏠 Host: ${dbConfig.host}`)
+    console.log("✅ MySQL connection established")
+    console.log(`📊 Database: ${dbConfig.database} @ ${dbConfig.host}`)
     connection.release()
     return true
   } catch (error) {
-    console.error("❌ Error conectando a MySQL:", error.message)
+    console.error("❌ MySQL connection failed:", error.message)
     return false
   }
 }
 
-// Función para ejecutar queries
 export const executeQuery = async (query, params = []) => {
+  if (!pool) throw new Error("Database not configured")
   try {
     const [results] = await pool.execute(query, params)
     return results
   } catch (error) {
-    console.error("Error ejecutando query:", error)
+    console.error("Query error:", error)
     throw error
   }
 }
 
-// Función para transacciones
 export const executeTransaction = async (queries) => {
+  if (!pool) throw new Error("Database not configured")
   const connection = await pool.getConnection()
   try {
     await connection.beginTransaction()
-
     const results = []
     for (const { query, params } of queries) {
       const [result] = await connection.execute(query, params)
       results.push(result)
     }
-
     await connection.commit()
     return results
   } catch (error) {
@@ -68,7 +75,7 @@ export const executeTransaction = async (queries) => {
   }
 }
 
-// Inicializar conexión al importar
-testConnection()
+// Test connection at startup (non-blocking)
+testConnection().catch(() => {})
 
 export default pool

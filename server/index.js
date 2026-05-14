@@ -6,7 +6,9 @@ import morgan from "morgan"
 import rateLimit from "express-rate-limit"
 import dotenv from "dotenv"
 
-// Importar rutas
+dotenv.config()
+
+// Routes
 import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/users.js"
 import roomRoutes from "./routes/rooms.js"
@@ -15,18 +17,15 @@ import serviceRoutes from "./routes/services.js"
 import paymentRoutes from "./routes/payments.js"
 import dashboardRoutes from "./routes/dashboard.js"
 import clientRoutes from "./routes/clients.js"
-import employeeRoutes from "./routes/employees.js" // 🆕 NUEVA RUTA
+import employeeRoutes from "./routes/employees.js"
 
-// Importar middleware
+// Middleware
 import { errorHandler } from "./middleware/errorHandler.js"
-import { authenticateToken } from "./middleware/auth.js"
-
-dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Configuración de seguridad
+// Security
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -37,39 +36,59 @@ app.use(
         imgSrc: ["'self'", "data:", "https:"],
       },
     },
+    crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 )
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // máximo 100 requests por ventana de tiempo
-  message: "Demasiadas solicitudes desde esta IP, intenta de nuevo más tarde.",
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  message: { error: "Too many requests. Please try again later." },
   standardHeaders: true,
   legacyHeaders: false,
 })
-
 app.use(limiter)
 
-// Middleware básico
+// Middleware
 app.use(compression())
-app.use(morgan("combined"))
+app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"))
+
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:3000",
+  "https://hotel-dc-company.vercel.app",
+  /\.vercel\.app$/,
+]
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true)
+      const allowed = allowedOrigins.some((o) =>
+        o instanceof RegExp ? o.test(origin) : o === origin
+      )
+      callback(null, allowed)
+    },
     credentials: true,
   }),
 )
+
 app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true, limit: "10mb" }))
 
-// Rutas públicas
+// Health check (no DB required)
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || "development",
+    database: process.env.DB_HOST ? "configured" : "not configured",
+  })
+})
+
+// Routes
 app.use("/api/auth", authRoutes)
-
-// 🔓 ACCESO TEMPORAL SIN AUTENTICACIÓN - COMENTA LA SIGUIENTE LÍNEA:
-// app.use("/api", authenticateToken)
-
-// 🎯 RUTAS PROTEGIDAS PERO TEMPORALMENTE SIN AUTENTICACIÓN
 app.use("/api/users", userRoutes)
 app.use("/api/rooms", roomRoutes)
 app.use("/api/reservations", reservationRoutes)
@@ -77,70 +96,47 @@ app.use("/api/services", serviceRoutes)
 app.use("/api/payments", paymentRoutes)
 app.use("/api/dashboard", dashboardRoutes)
 app.use("/api/clients", clientRoutes)
-app.use("/api/employees", employeeRoutes) // 🆕 NUEVA RUTA
+app.use("/api/employees", employeeRoutes)
 
-// Ruta de salud del servidor
-app.get("/api/health", (req, res) => {
-  res.json({
-    status: "OK",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || "development",
-  })
-})
-
-// Ruta específica para users (por si acaso)
-app.get("/api/users/test", (req, res) => {
-  res.json({
-    message: "Ruta de usuarios funcionando",
-    timestamp: new Date().toISOString()
-  })
-})
-
-// Middleware de manejo de errores
-app.use(errorHandler)
-
-// Manejo de rutas no encontradas
+// 404 handler
 app.use("*", (req, res) => {
   res.status(404).json({
-    error: "Ruta no encontrada",
+    error: "Route not found",
     path: req.originalUrl,
     method: req.method,
     availableRoutes: [
       "/api/health",
+      "/api/auth",
       "/api/users",
-      "/api/rooms", 
+      "/api/rooms",
       "/api/services",
       "/api/clients",
       "/api/reservations",
-      "/api/employees" // 🆕 NUEVA RUTA
-    ]
+      "/api/employees",
+    ],
   })
 })
 
+// Error handler
+app.use(errorHandler)
+
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor ejecutándose en puerto ${PORT}`)
-  console.log(`🌍 Entorno: ${process.env.NODE_ENV || "development"}`)
-  console.log(`📊 API disponible en: http://localhost:${PORT}/api`)
-  console.log(`🔓 MODO: Autenticación temporalmente desactivada`)
-  console.log(`📋 Rutas disponibles:`)
-  console.log(`   GET  /api/health`)
-  console.log(`   GET  /api/users`)
-  console.log(`   GET  /api/users/test`)
-  console.log(`   GET  /api/rooms`)
-  console.log(`   GET  /api/services`)
-  console.log(`   POST /api/clients`)
-  console.log(`   POST /api/reservations`)
-  console.log(`   GET  /api/employees`) // 🆕 NUEVA RUTA
+  console.log(`🚀 Server running on port ${PORT}`)
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`)
+  console.log(`📊 API available at: http://localhost:${PORT}/api`)
+  console.log(`🏨 Hotel DC Company Backend`)
 })
 
-// Manejo de errores no capturados
+// Graceful shutdown
 process.on("unhandledRejection", (err) => {
-  console.error("Error no manejado:", err)
-  process.exit(1)
+  console.error("Unhandled rejection:", err.message)
+  // Don't exit in production — log and continue
+  if (process.env.NODE_ENV !== "production") process.exit(1)
 })
 
 process.on("uncaughtException", (err) => {
-  console.error("Excepción no capturada:", err)
+  console.error("Uncaught exception:", err.message)
   process.exit(1)
 })
+
+export default app

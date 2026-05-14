@@ -3,40 +3,64 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { Star, ChevronDown } from "lucide-react"
 
 export default function HeroSection() {
   return (
-    <section className="relative h-[80vh] md:h-[90vh] lg:h-screen overflow-hidden">
+    <section className="relative h-[85vh] md:h-[90vh] lg:h-screen overflow-hidden">
       <Image
-        src="/placeholder.svg?height=1200&width=1600"
-        alt="Hotel de Lujo"
+        src="/luxury-hotel-lobby.jpg"
+        alt="Hotel DC Company - Luxury Lobby"
         fill
         className="object-cover absolute z-0"
         priority
       />
-      <div className="absolute inset-0 bg-black/40 z-10"></div>
-      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4">Bienvenido a HOTEL DC COMPANY</h1>
-        <p className="text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl">
-          Disfrute de una experiencia de lujo inolvidable en el corazón de la ciudad. Descubra nuestras habitaciones y
-          servicios exclusivos.
+      {/* Gradient overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-10" />
+
+      <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-4">
+        {/* Star rating badge */}
+        <div className="flex items-center gap-1 mb-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+          ))}
+          <span className="ml-2 text-sm font-medium text-white/90">5-Star Luxury Experience</span>
+        </div>
+
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight drop-shadow-lg">
+          Welcome to{" "}
+          <span className="text-yellow-400">Hotel DC</span>
+          <br className="hidden md:block" />
+          <span className="hidden md:inline"> Company</span>
+          <span className="md:hidden"> Company</span>
+        </h1>
+
+        <p className="text-base sm:text-lg md:text-xl mb-10 max-w-2xl text-white/85 leading-relaxed drop-shadow">
+          Experience unforgettable luxury in the heart of the city. Discover our exclusive rooms,
+          world-class dining, and exceptional services.
         </p>
+
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Button
             asChild
             size="lg"
-            className="bg-primary text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-primary/90"
+            className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold px-8 py-4 rounded-full text-base shadow-lg transition-all duration-200 hover:scale-105"
           >
-            <Link href="/rooms">Explorar Habitaciones</Link>
+            <Link href="/rooms">Explore Rooms</Link>
           </Button>
           <Button
             asChild
             size="lg"
             variant="outline"
-            className="bg-white text-primary px-6 py-3 rounded-md text-lg font-medium hover:bg-gray-100"
+            className="border-2 border-white/80 text-white bg-white/10 backdrop-blur-sm hover:bg-white hover:text-black px-8 py-4 rounded-full text-base font-semibold transition-all duration-200 hover:scale-105"
           >
-            <Link href="/booking/select-room">Seleccionar Habitación</Link>
+            <Link href="/booking/select-room">Book Now</Link>
           </Button>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <ChevronDown className="h-7 w-7 text-white/60" />
         </div>
       </div>
     </section>
