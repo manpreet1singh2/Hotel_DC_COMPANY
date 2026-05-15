@@ -29,10 +29,7 @@ export default function HeroSection() {
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight drop-shadow-lg">
           Welcome to{" "}
-          <span className="text-yellow-400">Hotel DC</span>
-          <br className="hidden md:block" />
-          <span className="hidden md:inline"> Company</span>
-          <span className="md:hidden"> Company</span>
+          <span className="text-yellow-400">Hotel DC Company</span>
         </h1>
 
         <p className="text-base sm:text-lg md:text-xl mb-10 max-w-2xl text-white/85 leading-relaxed drop-shadow">

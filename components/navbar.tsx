@@ -44,11 +44,11 @@ export default function Navbar() {
   }
 
   const navigation = [
-    { name: "Inicio", href: "/" },
-    { name: "Habitaciones", href: "/rooms" },
-    { name: "Servicios", href: "/services" },
-    { name: "Reservar", href: "/booking" },
-    { name: "Contacto", href: "/contact" },
+    { name: "Home", href: "/" },
+    { name: "Rooms", href: "/rooms" },
+    { name: "Services", href: "/services" },
+    { name: "Book Now", href: "/booking" },
+    { name: "Contact", href: "/contact" },
   ]
 
   return (
@@ -102,23 +102,23 @@ export default function Navbar() {
                   <DropdownMenuItem asChild>
                     <Link href={getDashboardLink()}>
                       <User className="mr-2 h-4 w-4" />
-                      Mi Panel
+                      My Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Cerrar Sesión
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
                 <Button variant="ghost" asChild>
-                  <Link href="/auth/login">Iniciar Sesión</Link>
+                  <Link href="/auth/login">Sign In</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/auth/register">Registrarse</Link>
+                  <Link href="/auth/register">Register</Link>
                 </Button>
               </div>
             )}
@@ -183,14 +183,14 @@ export default function Navbar() {
                     className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
                     onClick={() => setIsOpen(false)}
                   >
-                    Iniciar Sesión
+                    Sign In
                   </Link>
                   <Link
                     href="/auth/register"
                     className="block px-3 py-2 text-base font-medium text-white bg-primary hover:bg-primary/90 rounded-md mx-3"
                     onClick={() => setIsOpen(false)}
                   >
-                    Registrarse
+                    Register
                   </Link>
                 </div>
               )}
