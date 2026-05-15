@@ -18,8 +18,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
 export const metadata: Metadata = {
-  title: "Confirmación de Reserva - HOTEL DC COMPANY",
-  description: "Su reserva ha sido confirmada. Gracias por elegir nuestro hotel.",
+  title: "Booking Confirmation - Hotel DC Company",
+  description: "Your reservation has been confirmed. Gracias por elegir nuestro hotel.",
 }
 
 export default function ConfirmationPage({ searchParams }: { searchParams: { id?: string } }) {
@@ -33,7 +33,7 @@ export default function ConfirmationPage({ searchParams }: { searchParams: { id?
             <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
               <Check className="h-10 w-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Reserva Confirmada!</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Booking Confirmed!</h1>
             <p className="text-lg text-gray-600">
               Su reserva ha sido procesada con éxito. Hemos enviado un correo electrónico con los detalles de su
               reserva.
@@ -46,7 +46,7 @@ export default function ConfirmationPage({ searchParams }: { searchParams: { id?
 
           <div className="p-8">
             <div className="border-b pb-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4">Detalles de la Reserva</h2>
+              <h2 className="text-xl font-semibold mb-4">Booking Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-medium mb-3">Información de Estancia</h3>
@@ -56,13 +56,13 @@ export default function ConfirmationPage({ searchParams }: { searchParams: { id?
                       <div>
                         <p className="font-medium">Fechas</p>
                         <p className="text-gray-600">15 Ene 2024 - 20 Ene 2024</p>
-                        <p className="text-gray-600">5 noches</p>
+                        <p className="text-gray-600">5 nights</p>
                       </div>
                     </div>
                     <div className="flex items-start">
                       <Users className="h-5 w-5 text-primary mr-2 mt-0.5" />
                       <div>
-                        <p className="font-medium">Huéspedes</p>
+                        <p className="font-medium">Guests</p>
                         <p className="text-gray-600">2 adultos</p>
                       </div>
                     </div>
@@ -70,7 +70,7 @@ export default function ConfirmationPage({ searchParams }: { searchParams: { id?
                       <MapPin className="h-5 w-5 text-primary mr-2 mt-0.5" />
                       <div>
                         <p className="font-medium">Ubicación</p>
-                        <p className="text-gray-600">HOTEL DC COMPANY</p>
+                        <p className="text-gray-600">Hotel DC Company</p>
                         <p className="text-gray-600">123 Luxury Avenue, City Center</p>
                       </div>
                     </div>
@@ -78,7 +78,7 @@ export default function ConfirmationPage({ searchParams }: { searchParams: { id?
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-medium mb-3">Habitación Reservada</h3>
+                  <h3 className="font-medium mb-3">Room Reservada</h3>
                   <div className="flex items-start">
                     <div className="relative w-20 h-20 rounded-md overflow-hidden mr-3">
                       <Image src="/placeholder.svg" alt="Suite Ejecutiva" fill className="object-cover" />
@@ -127,7 +127,7 @@ export default function ConfirmationPage({ searchParams }: { searchParams: { id?
                     <div>
                       <p className="font-medium">Documentación Necesaria</p>
                       <p className="text-gray-600">
-                        Todos los huéspedes deben presentar un documento de identidad válido al momento del check-in.
+                        Todos los guests deben presentar un documento de identidad válido al momento del check-in.
                       </p>
                     </div>
                   </div>

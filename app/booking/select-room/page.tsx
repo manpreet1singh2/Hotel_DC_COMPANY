@@ -4,29 +4,30 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Seleccionar Habitación - HOTEL DC COMPANY",
-  description: "Seleccione su habitación ideal para una estancia perfecta en nuestro hotel.",
+  title: "Select Your Room | Hotel DC Company",
+  description: "Choose your ideal room for a perfect stay at Hotel DC Company.",
 }
 
 export default function SelectRoomPage() {
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Seleccionar Habitación</h1>
-          <p className="text-gray-600 mt-2">Elija su habitación ideal de nuestras opciones disponibles</p>
+    <div className="bg-gray-50 min-h-screen">
+      <div className="bg-gray-900 text-white py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-yellow-400 font-semibold text-sm uppercase tracking-widest mb-2">Step 1 of 3</p>
+          <h1 className="text-4xl font-bold mb-2">Select Your Room</h1>
+          <p className="text-gray-400">Choose from our curated selection of luxury rooms and suites.</p>
         </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <RoomSelectorCinema />
         </div>
-
         <div className="mt-8 flex justify-between">
           <Link href="/rooms">
-            <Button variant="outline">Volver a Habitaciones</Button>
+            <Button variant="outline">← Back to Rooms</Button>
           </Link>
           <Link href="/booking">
-            <Button>Continuar con la Reserva</Button>
+            <Button>Continue to Booking →</Button>
           </Link>
         </div>
       </div>

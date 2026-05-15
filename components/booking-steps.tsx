@@ -133,7 +133,7 @@ export default function BookingSteps() {
           // Asegurar que todas las propiedades necesarias existan
           const roomData = {
             id: room.id?.toString() || room.id_habitacion?.toString() || Math.random().toString(),
-            name: room.name || `Habitación ${room.number || room.numero_habitacion}`,
+            name: room.name || `Room ${room.number || room.numero_habitacion}`,
             description: room.description || room.descripcion || 'Sin descripción disponible',
             price: Number(room.price) || Number(room.precio) || 0,
             capacity: Number(room.capacity) || Number(room.capacidad) || 1,
@@ -274,7 +274,7 @@ export default function BookingSteps() {
           newCheckOut = date.toISOString().split("T")[0]
         }
 
-        // Calcular noches y total
+        // Calcular nights y total
         let nights = 0
         if (newCheckIn && newCheckOut) {
           const startDate = new Date(newCheckIn)
@@ -582,16 +582,16 @@ export default function BookingSteps() {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="h-10 w-10 text-green-600" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">¡Reserva Confirmada!</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">¡Booking Confirmed!</h2>
           <p className="text-gray-600 text-lg">
-            Su reserva ha sido confirmada con éxito. Hemos enviado un correo electrónico de confirmación con todos los
+            Your reservation has been confirmed con éxito. Hemos enviado un correo electrónico de confirmación con todos los
             detalles a <span className="font-medium">{formData.email}</span>.
           </p>
         </div>
 
         <div className="bg-gray-50 p-6 rounded-lg mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold">Detalles de la Reserva</h3>
+            <h3 className="text-xl font-semibold">Booking Details</h3>
             <Badge className="bg-green-600">Confirmada</Badge>
           </div>
 
@@ -630,7 +630,7 @@ export default function BookingSteps() {
               </div>
               <div className="flex items-center text-gray-600 mt-1">
                 <Users className="h-4 w-4 mr-1" />
-                <span>{formData.guests} huéspedes</span>
+                <span>{formData.guests} guests</span>
               </div>
             </div>
           </div>
@@ -683,7 +683,7 @@ export default function BookingSteps() {
               <div>
                 <p className="font-medium text-blue-800">Documentación Necesaria</p>
                 <p className="text-blue-700">
-                  Todos los huéspedes deben presentar un documento de identidad válido al momento del check-in.
+                  Todos los guests deben presentar un documento de identidad válido al momento del check-in.
                 </p>
               </div>
             </div>
@@ -753,14 +753,14 @@ export default function BookingSteps() {
       {/* Paso 1: Información del huésped */}
       {step === 1 && (
         <div>
-          <h2 className="text-2xl font-bold mb-6">Información del Huésped</h2>
+          <h2 className="text-2xl font-bold mb-6">Guest Information</h2>
 
           {/* Selección de fechas */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold mb-3">Fechas de Estancia</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="checkIn">Fecha de Llegada</Label>
+                <Label htmlFor="checkIn">Fecha de Check-in</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="w-full justify-start text-left font-normal mt-1">
@@ -785,7 +785,7 @@ export default function BookingSteps() {
                 </Popover>
               </div>
               <div>
-                <Label htmlFor="checkOut">Fecha de Salida</Label>
+                <Label htmlFor="checkOut">Fecha de Check-out</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="w-full justify-start text-left font-normal mt-1">
@@ -815,7 +815,7 @@ export default function BookingSteps() {
 
             <div className="mt-4 flex items-center">
               <Label htmlFor="guests" className="mr-2">
-                Huéspedes:
+                Guests:
               </Label>
               <select
                 id="guests"
@@ -823,11 +823,11 @@ export default function BookingSteps() {
                 value={formData.guests}
                 onChange={handleGuestsChange}
                 className="border rounded-md px-3 py-1"
-                aria-label="Número de huéspedes"
+                aria-label="Número de guests"
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                   <option key={num} value={num}>
-                    {num} {num === 1 ? "huésped" : "huéspedes"}
+                    {num} {num === 1 ? "huésped" : "guests"}
                   </option>
                 ))}
               </select>
@@ -836,7 +836,7 @@ export default function BookingSteps() {
 
           {/* HABITACIONES SIEMPRE VISIBLES */}
           <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-3">Selección de Habitación</h3>
+            <h3 className="text-lg font-semibold mb-3">Selección de Room</h3>
 
             <div className="flex items-center mb-4 space-x-2">
               <div className="relative flex-grow">
@@ -983,7 +983,7 @@ export default function BookingSteps() {
 
                         <div className="flex items-center text-gray-600 mt-2">
                           <Users className="h-4 w-4 mr-1" />
-                          <span>Hasta {room.capacity} huéspedes</span>
+                          <span>Hasta {room.capacity} guests</span>
                         </div>
 
                         <p className="text-gray-600 mt-2 line-clamp-2">{room.description}</p>
@@ -1002,7 +1002,7 @@ export default function BookingSteps() {
                         <div className="flex justify-between items-center mt-4 pt-4 border-t">
                           <div>
                             <span className="text-2xl font-bold">${(room.price || 0).toLocaleString()}</span>
-                            <span className="text-gray-500"> / noche</span>
+                            <span className="text-gray-500"> / night</span>
                           </div>
 
                           <Button
@@ -1038,7 +1038,7 @@ export default function BookingSteps() {
 
           {formData.roomId && (
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <h3 className="font-semibold mb-2">Habitación Seleccionada</h3>
+              <h3 className="font-semibold mb-2">Room Seleccionada</h3>
               <div className="flex items-center">
                 <div className="w-16 h-16 mr-3 bg-gray-200 flex items-center justify-center rounded-md">
                   {formData.roomImage ? (
@@ -1056,7 +1056,7 @@ export default function BookingSteps() {
                 <div>
                   <p className="font-medium">{formData.roomName}</p>
                   <p className="text-sm text-gray-600">
-                    {formData.nights} {formData.nights === 1 ? "noche" : "noches"} x ${formData.price.toLocaleString()} = $
+                    {formData.nights} {formData.nights === 1 ? "night" : "nights"} x ${formData.price.toLocaleString()} = $
                     {formData.subtotal.toFixed(2)}
                   </p>
                 </div>
@@ -1132,7 +1132,7 @@ export default function BookingSteps() {
               <div className="flex justify-between mb-2">
                 <span className="text-gray-600">
                   ${promoApplied ? (formData.price * 0.85).toFixed(2) : formData.price.toLocaleString()} x {formData.nights}{" "}
-                  {formData.nights === 1 ? "noche" : "noches"}
+                  {formData.nights === 1 ? "night" : "nights"}
                 </span>
                 <span>${formData.subtotal.toFixed(2)}</span>
               </div>
@@ -1312,7 +1312,7 @@ export default function BookingSteps() {
                   <div>
                     <p className="font-medium">{formData.roomName}</p>
                     <p className="text-sm text-gray-600">
-                      {formData.nights} {formData.nights === 1 ? "noche" : "noches"}
+                      {formData.nights} {formData.nights === 1 ? "night" : "nights"}
                     </p>
                   </div>
                 </div>
@@ -1331,7 +1331,7 @@ export default function BookingSteps() {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Huéspedes</span>
+                    <span className="text-gray-600">Guests</span>
                     <span>{formData.guests}</span>
                   </div>
                 </div>
@@ -1376,7 +1376,7 @@ export default function BookingSteps() {
       {/* Paso 3: Confirmación */}
       {step === 3 && (
         <div>
-          <h2 className="text-2xl font-bold mb-6">Confirmación de Reserva</h2>
+          <h2 className="text-2xl font-bold mb-6">Booking Confirmation</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
@@ -1389,7 +1389,7 @@ export default function BookingSteps() {
                     <p className="text-sm text-gray-600">
                       Puedes cancelar tu reserva de forma gratuita hasta 48 horas antes de tu fecha de check-in. 
                       Las cancelaciones realizadas con menos de 48 horas de antelación estarán sujetas a un cargo 
-                      equivalente a la primera noche de estancia.
+                      equivalente a la primera night de estancia.
                     </p>
                   </div>
 
@@ -1402,10 +1402,10 @@ export default function BookingSteps() {
                   </div>
 
                   <div>
-                    <h4 className="font-medium mb-2">Política de Huéspedes</h4>
+                    <h4 className="font-medium mb-2">Política de Guests</h4>
                     <p className="text-sm text-gray-600">
-                      El número de huéspedes no puede exceder la capacidad máxima de la habitación. 
-                      Se requiere identificación válida para todos los huéspedes al momento del check-in.
+                      El número de guests no puede exceder la capacidad máxima de la habitación. 
+                      Se requiere identificación válida para todos los guests al momento del check-in.
                     </p>
                   </div>
 
@@ -1460,7 +1460,7 @@ export default function BookingSteps() {
                   <div>
                     <p className="font-medium">{formData.roomName}</p>
                     <p className="text-sm text-gray-600">
-                      {formData.nights} {formData.nights === 1 ? "noche" : "noches"}
+                      {formData.nights} {formData.nights === 1 ? "night" : "nights"}
                     </p>
                   </div>
                 </div>
@@ -1474,7 +1474,7 @@ export default function BookingSteps() {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Huéspedes</span>
+                    <span className="text-gray-600">Guests</span>
                     <span>{formData.guests}</span>
                   </div>
                   <div className="flex justify-between">

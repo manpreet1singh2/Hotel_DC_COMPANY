@@ -92,7 +92,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
     if (promoCode.toUpperCase() === "HOTEL15") {
       setPromoApplied(true)
     } else {
-      alert("Código promocional inválido. Intente con 'HOTEL15'")
+      alert("Promo code inválido. Intente con 'HOTEL15'")
     }
   }
 
@@ -109,7 +109,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
 
   const handleBookNow = async () => {
     if (!checkIn || !checkOut) {
-      alert("Por favor seleccione fechas de entrada y salida")
+      alert("Please select check-in and check-out dates")
       return
     }
 
@@ -152,7 +152,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
       const clientResult = await clientResponse.json()
       
       if (!clientResponse.ok) {
-        throw new Error(clientResult.error || 'Error al crear cliente')
+        throw new Error(clientResult.error || 'Error creating guest profile')
       }
 
       console.log('✅ Client created:', clientResult)
@@ -179,7 +179,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
       // Validar datos críticos de reserva
       if (!reservationPayload.cliente_id || !reservationPayload.habitacion_id || 
           !reservationPayload.fecha_inicio || !reservationPayload.fecha_fin) {
-        throw new Error('Datos de reserva incompletos')
+        throw new Error('Incomplete booking data')
       }
 
       console.log('📦 Reservation data to send:', reservationPayload)
@@ -196,7 +196,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
       const reservationResult = await reservationResponse.json()
       
       if (!reservationResponse.ok) {
-        throw new Error(reservationResult.error || 'Error al crear reserva')
+        throw new Error(reservationResult.error || 'Error creating reservation')
       }
 
       console.log('✅ Reservation created:', reservationResult)
@@ -206,7 +206,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
 
     } catch (error) {
       console.error('❌ Error creating reservation:', error)
-      alert('Error al crear la reserva: ' + (error instanceof Error ? error.message : 'Error desconocido'))
+      alert('Error creating reservation: ' + (error instanceof Error ? error.message : 'Unknown error'))
     } finally {
       setIsLoading(false)
     }
@@ -217,14 +217,14 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
       <Tabs defaultValue="client" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="client">Datos Personales</TabsTrigger>
-          <TabsTrigger value="dates">Fechas y Huéspedes</TabsTrigger>
+          <TabsTrigger value="dates">Dates & Guests</TabsTrigger>
           <TabsTrigger value="services">Servicios</TabsTrigger>
         </TabsList>
 
         <TabsContent value="client" className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="nombre">Nombre *</Label>
+              <Label htmlFor="nombre">Full Name *</Label>
               <Input
                 id="nombre"
                 value={clientData.nombre}
@@ -234,7 +234,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
               />
             </div>
             <div>
-              <Label htmlFor="apellido">Apellido *</Label>
+              <Label htmlFor="apellido">Last Name *</Label>
               <Input
                 id="apellido"
                 value={clientData.apellido}
@@ -259,7 +259,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="telefono">Teléfono</Label>
+              <Label htmlFor="telefono">Phone</Label>
               <Input
                 id="telefono"
                 value={clientData.telefono}
@@ -333,7 +333,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="guests">Huéspedes</Label>
+            <Label htmlFor="guests">Guests</Label>
             <div className="flex items-center mt-1">
               <Button
                 type="button"
@@ -366,13 +366,13 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
               <div className="flex-grow">
                 <Input
                   id="promoCode"
-                  placeholder="Código promocional"
+                  placeholder="Promo code"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                 />
               </div>
               <Button onClick={handleApplyPromo} variant="outline" disabled={!promoCode}>
-                Aplicar
+                Apply
               </Button>
             </div>
           ) : (
@@ -385,7 +385,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
             <Alert className="bg-green-50 border-green-200">
               <Info className="h-4 w-4 text-green-600" />
               <AlertDescription className="text-green-600">
-                ¡Código promocional aplicado! 15% de descuento.
+                ¡Promo code aplicado! 15% de descuento.
               </AlertDescription>
             </Alert>
           )}
@@ -403,7 +403,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
         <div className="border-t pt-4 mt-4 space-y-2">
           <div className="flex justify-between">
             <span className="text-gray-600">
-              Habitación: ${roomPriceWithDiscount.toFixed(2)} x {nights} {nights === 1 ? "noche" : "noches"}
+              Room: ${roomPriceWithDiscount.toFixed(2)} x {nights} {nights === 1 ? "night" : "nights"}
             </span>
             <span>${roomSubtotal.toFixed(2)}</span>
           </div>
@@ -459,7 +459,7 @@ export default function BookingForm({ roomId, price }: BookingFormProps) {
           ) : (
             <>
               <CreditCard className="mr-2 h-4 w-4" />
-              Confirmar Reserva
+              Confirm Booking
             </>
           )}
         </Button>

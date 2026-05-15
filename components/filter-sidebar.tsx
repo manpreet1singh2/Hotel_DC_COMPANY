@@ -66,12 +66,12 @@ export default function FilterSidebar({ onFiltersChange }: FilterSidebarProps) {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Filtros</h3>
+      <h3 className="text-lg font-semibold mb-4">Filters</h3>
 
       {/* Rango de precios */}
       <div className="mb-6">
         <Label className="text-sm font-medium mb-2 block">
-          Precio por noche: ${priceRange[0]} - ${priceRange[1]}
+          Price per night: ${priceRange[0]} - ${priceRange[1]}
         </Label>
         <Slider value={priceRange} onValueChange={setPriceRange} max={1000} min={50} step={25} className="w-full" />
       </div>
@@ -117,10 +117,10 @@ export default function FilterSidebar({ onFiltersChange }: FilterSidebarProps) {
       {/* Botones de acción */}
       <div className="space-y-2">
         <Button onClick={handleApplyFilters} className="w-full">
-          Aplicar filtros
+          Apply Filters
         </Button>
         <Button onClick={handleClearFilters} variant="outline" className="w-full bg-transparent">
-          Limpiar filtros
+          Clear Filters
         </Button>
       </div>
     </div>

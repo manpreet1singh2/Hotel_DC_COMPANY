@@ -2,53 +2,52 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Utensils, SpadeIcon as Spa, Dumbbell, Wifi, Car, Coffee, ArrowRight } from "lucide-react"
+import { Utensils, SpadeIcon as Spa, Dumbbell, Wifi, Car, Coffee, Users, ArrowRight } from "lucide-react"
 import { getFeaturedServices } from "@/lib/api"
-import type { Service } from "@/lib/types"
 
-// Iconos por categoría
-const categoryIcons: { [key: string]: any } = {
-  'Alimentación': Utensils,
-  'Bienestar': Spa,
-  'Transporte': Car,
-  'Limpieza': Coffee,
-  'Comunicaciones': Wifi,
-  'Recreación': Dumbbell,
-  'Otros': Coffee
+const categoryIcons: Record<string, any> = {
+  Alimentación: Utensils, Food: Utensils,
+  Bienestar: Spa, Wellness: Spa, Spa: Spa,
+  Transporte: Car, Transport: Car,
+  Limpieza: Coffee, Housekeeping: Coffee,
+  Comunicaciones: Wifi, WiFi: Wifi,
+  Recreación: Dumbbell, Fitness: Dumbbell,
+  Otros: Users, Other: Users,
 }
 
+const FALLBACK = [
+  { id: "1", name: "Fine Dining Restaurant", category: "Food", price: 80, description: "Award-winning international cuisine crafted by our executive chef in an elegant atmosphere." },
+  { id: "2", name: "Luxury Spa & Wellness", category: "Spa", price: 120, description: "Full-service spa offering massages, facials, hydrotherapy, and holistic treatments." },
+  { id: "3", name: "Airport Transfer", category: "Transport", price: 45, description: "Premium door-to-door transfers in our luxury fleet — punctual and stress-free." },
+]
+
 export default function FeaturedServices() {
-  const [featuredServices, setFeaturedServices] = useState<Service[]>([])
+  const [services, setServices] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadFeaturedServices = async () => {
+    const load = async () => {
       try {
-        console.log('🔄 Loading featured services...')
-        const services = await getFeaturedServices()
-        console.log('✅ Featured services loaded:', services)
-        setFeaturedServices(services)
-      } catch (error) {
-        console.error('❌ Error loading featured services:', error)
+        const data = await getFeaturedServices()
+        setServices(data && data.length > 0 ? data : FALLBACK)
+      } catch {
+        setServices(FALLBACK)
       } finally {
         setIsLoading(false)
       }
     }
-
-    loadFeaturedServices()
+    load()
   }, [])
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[1, 2, 3].map((item) => (
-          <div key={item} className="bg-white p-6 rounded-lg shadow-md">
-            <div className="animate-pulse">
-              <div className="w-12 h-12 bg-gray-200 rounded-full mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-pulse">
+            <div className="w-12 h-12 bg-gray-200 rounded-xl mb-4" />
+            <div className="h-4 bg-gray-200 rounded w-3/4 mb-3" />
+            <div className="h-3 bg-gray-200 rounded w-full mb-2" />
+            <div className="h-3 bg-gray-200 rounded w-5/6" />
           </div>
         ))}
       </div>
@@ -56,22 +55,23 @@ export default function FeaturedServices() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {featuredServices.map((service) => {
-        const IconComponent = categoryIcons[service.category] || Coffee
-        
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {services.map((service) => {
+        const Icon = categoryIcons[service.category] || Users
+        const isFree = !service.price || service.price === 0
         return (
-          <div key={service.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-              <IconComponent className="h-6 w-6 text-primary" />
+          <div key={service.id} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+              <Icon className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">{service.name}</h3>
-            <p className="text-gray-600 mb-2">{service.description}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{service.name}</h3>
+            <p className="text-gray-500 text-sm leading-relaxed mb-4">{service.description}</p>
             <div className="flex justify-between items-center">
-              <span className="text-lg font-bold text-green-600">${service.price.toLocaleString()}</span>
-              <Link href="/services" className="text-primary hover:underline flex items-center text-sm">
-                Más información
-                <ArrowRight className="ml-1 h-3 w-3" />
+              <span className={`font-bold text-base ${isFree ? "text-green-600" : "text-gray-900"}`}>
+                {isFree ? "Complimentary" : `From $${service.price}`}
+              </span>
+              <Link href="/services" className="text-primary hover:underline flex items-center text-sm font-medium">
+                Learn more <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
             </div>
           </div>

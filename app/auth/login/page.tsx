@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import LoginForm from "@/components/auth/login-form"
 
 export const metadata: Metadata = {
-  title: "Iniciar Sesión - Hotel de Lujo",
-  description: "Acceda a su cuenta para gestionar sus reservas y preferencias.",
+  title: "Sign In | Hotel DC Company",
+  description: "Sign in to your Hotel DC Company account to manage reservations and preferences.",
 }
 
 export default function LoginPage() {
